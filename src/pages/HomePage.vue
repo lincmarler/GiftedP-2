@@ -20,7 +20,7 @@
             <div class="card elevation-1">
               <img class="img-fluid" :src="gift.url" alt="">
               <p class="text-center">{{ gift.tag }}</p>
-              <button v-if="gift.opened = false" @click="openGift(giftId)" class="btn btn-success">Open</button>
+              <button @click="openGift(gift.id)" class="btn btn-success">Open</button>
             </div>
           </div>
         </div>
@@ -36,10 +36,12 @@ import { giftService } from '../services/GiftService'
 import { logger } from '../utils/Logger'
 import Pop from '../utils/Pop'
 import { AppState } from '../AppState'
+import { Gift } from '../models/Gift'
 
 // import { Gift } from '../models/Gift'
 
 export default {
+  props: { gift: { type: Gift, required: true } },
   setup() {
     onMounted(getGifts)
 
@@ -58,6 +60,8 @@ export default {
     return {
       async openGift(giftId) {
         try {
+
+          logger.log(giftId)
           await giftService.openGift(giftId)
           getGifts()
         } catch (error) {
